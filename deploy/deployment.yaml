@@ -1,0 +1,55 @@
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: harness-mcp-server
+  namespace: harness-mcp
+  labels:
+    app: harness-mcp-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: harness-mcp-server
+  template:
+    metadata:
+      labels:
+        app: harness-mcp-server
+    spec:
+      containers:
+        - name: mcp-server
+          image: harness/mcp-server:latest
+          args: ["http-server"]
+          ports:
+            - containerPort: 8080
+              name: http
+          envFrom:
+            - configMapRef:
+                name: harness-mcp-config
+            - secretRef:
+                name: harness-mcp-secrets
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          securityContext:
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+      securityContext:
+        fsGroup: 1000

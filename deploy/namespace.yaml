@@ -1,0 +1,15 @@
+# namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: harness-mcp
+---
+# secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: harness-mcp-secrets
+  namespace: harness-mcp
+type: Opaque
+stringData:
+  HARNESS_API_KEY: "<YOUR_API_KEY>"

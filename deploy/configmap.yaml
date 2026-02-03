@@ -1,0 +1,12 @@
+# configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: harness-mcp-config
+  namespace: harness-mcp
+data:
+  HARNESS_BASE_URL: "https://app.harness.io"
+  HARNESS_DEFAULT_ORG_ID: "<YOUR_ORG_ID>"
+  HARNESS_DEFAULT_PROJECT_ID: "<YOUR_PROJECT_ID>"
+  HARNESS_TOOLSETS: "default,pipelines,repositories,connectors"
+  HARNESS_LOG_LEVEL: "info"
